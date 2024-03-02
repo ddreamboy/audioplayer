@@ -29,8 +29,8 @@ class Bottombar(ft.UserControl):
         self.audio_player = AudioPlayer(self.app, self.page)
         self.page.bottom_appbar = self.build()
 
-    def bottombar_height_update(self):
-        self.bottombar_view.height = 200
+    def bottombar_height_update(self, value):
+        self.bottombar_view.height = value
 
     def build(self):
         self.bottombar_items = ft.Column(

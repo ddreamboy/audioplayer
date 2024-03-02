@@ -7,7 +7,7 @@ def clean_filename(filename):
     return cleaned_filename
 
 
-def get_audio_files(directory=r'E:\Python\audioplayer\audio\saved'):
+def get_audio_files(directory=r'C:\WorkSpace\PythonProjects\audioplayer\audio\saved'):
     files = []
     for file in os.listdir(directory):
         if os.path.isfile(os.path.join(directory, file)):
@@ -25,14 +25,14 @@ def get_audio_files(directory=r'E:\Python\audioplayer\audio\saved'):
 
 def get_audio_mp3_path(filename):
     filename = clean_filename(filename)
-    directory = r'E:\Python\audioplayer\audio\saved'
+    directory = r'C:\WorkSpace\PythonProjects\audioplayer\audio\saved'
     path = os.path.join(directory, f'{filename}.mp3')
     return path
 
 
 def get_image_path(filename):
     filename = clean_filename(filename)
-    directory = r'E:\Python\audioplayer\audio\saved'
+    directory = r'C:\WorkSpace\PythonProjects\audioplayer\audio\saved'
     path = os.path.join(directory, filename)
     return path
 

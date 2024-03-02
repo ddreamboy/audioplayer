@@ -9,6 +9,7 @@ from youtube_audio import (
     download_audio_to_saved
 )
 import flet as ft
+import time
 
 
 class SearchItem(ft.UserControl):
@@ -44,9 +45,9 @@ class SearchItem(ft.UserControl):
                 )
 
     def play_audio(self):
+        self.app.layout.bottombar.audio_player.show_progress_starting_track()
         download_audio_to_temp(self.link, self.title)
         audio_src = get_temp_path(self.title)
-        self.app.layout.bottombar.bottombar_height_update()
         self.app.layout.bottombar.audio_player.set_audio_elements(
             self.title,
             self.thumbnail_url,
@@ -71,6 +72,7 @@ class SearchItem(ft.UserControl):
                 self.name_text,
                 action_items
             ],
+            alignment=ft.MainAxisAlignment.CENTER,
         )
         return view
 
@@ -83,6 +85,7 @@ class SearchPage(ft.UserControl):
         self.search_field = ft.TextField(
             hint_text='Трек, клип, исполнитель...',
             border=ft.InputBorder.UNDERLINE,
+            on_change=self.change_track
         )
         self.search_bttn = ft.IconButton(
                             icon=ft.icons.SEARCH,
@@ -94,13 +97,15 @@ class SearchPage(ft.UserControl):
             expand=1,
             spacing=10
             )
+        self.query_count = 0
 
     def build(self):
         search_view = ft.Row(
                     controls=[
                         self.search_field,
-                        self.search_bttn
-                    ]
+                        # self.search_bttn
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER
                 )
         view = ft.Column(
             [
@@ -115,18 +120,29 @@ class SearchPage(ft.UserControl):
                 ft.Divider(height=2),
                 self.search_result
             ],
-            alignment=ft.MainAxisAlignment.START,
             expand=True
         )
         return view
 
     def music_search(self, search_query):
+        self.progress_ring = ft.Row(
+            [
+                ft.Text(),
+                ft.ProgressRing()
+            ],
+            alignment=ft.MainAxisAlignment.CENTER
+        )
         self.search_result.controls = []
+        self.search_result.controls.append(self.progress_ring)
+        self.page.update()
         clean_temp_dir()
         if search_query:
+            self.search_field.disabled = True
+            self.page.update()
             videos = search_videos(search_query)
             if videos:
                 for video in videos:
+                    self.search_result.controls.remove(self.progress_ring)
                     search_result_item = SearchItem(self.app,
                                                     self.page,
                                                     video['title'],
@@ -134,5 +150,36 @@ class SearchPage(ft.UserControl):
                                                     )
                     search_result_item = search_result_item.build()
                     self.search_result.controls.append(search_result_item)
+                    if self.search_field.disabled:
+                        self.search_field.disabled = False
                     self.search_result.controls.append(ft.Divider(height=1))
+                    self.search_result.controls.append(self.progress_ring)
+                    self.page.update()
+                self.search_result.controls.pop()
+                if self.search_field.disabled:
+                        self.search_field.disabled = False
                 self.page.update()
+            else:
+                self.search_result.controls.pop()
+                error_text = ft.Row(
+                    [
+                        ft.Text(
+                            f'По запросу "{search_query}" не удалось ничего найти',
+                            width=300
+                            )
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER
+                )
+                self.search_result.controls.append(error_text)
+                if self.search_field.disabled:
+                        self.search_field.disabled = False
+                self.page.update()
+        
+    def change_track(self, e):
+        query = e.control.value
+        self.query_count += 1
+        time.sleep(1)
+        if query and self.query_count == 1:
+            self.music_search(e.control.value)
+        self.query_count -= 1
+        

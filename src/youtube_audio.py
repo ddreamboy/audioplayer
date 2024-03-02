@@ -10,13 +10,13 @@ import re
 
 def get_temp_path(filename):
     filename = clean_filename(filename)
-    path = os.path.join(r'E:\Python\audioplayer\audio\temp', filename)
+    path = os.path.join(r'C:\WorkSpace\PythonProjects\audioplayer\audio\temp', filename)
     return path
 
 
 def get_saved_path(filename):
     filename = clean_filename(filename)
-    path = os.path.join(r'E:\Python\audioplayer\audio\saved', filename)
+    path = os.path.join(r'C:\WorkSpace\PythonProjects\audioplayer\audio\saved', filename)
     return path
 
 
@@ -26,7 +26,7 @@ def clean_filename(filename):
 
 
 def clean_temp_dir():
-    directory = r'E:\Python\audioplayer\audio\temp'
+    directory = r'C:\WorkSpace\PythonProjects\audioplayer\audio\temp'
     files = os.listdir(directory)
     for file in files:
         file_path = os.path.join(directory, file)

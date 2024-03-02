@@ -46,9 +46,9 @@ class FreePlayerApp(ft.UserControl):
 
 def main(page: ft.Page):
     page.title = 'Free Player'
-    page.window_width = 9 * 45
-    page.window_height = 16 * 45
-    page.window_resizable = False
+    page.window_width = 9 * 47
+    page.window_height = 16 * 47
+    page.window_resizable = True
     page.window_maximizable = False
     page.window_always_on_top = True
     page.theme = ft.Theme(

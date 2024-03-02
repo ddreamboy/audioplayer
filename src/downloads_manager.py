@@ -22,7 +22,7 @@ class DownloadsItem:
                 )
         self.name_text = ft.Text(
                     filename,
-                    width=9 * 25
+                    width=9 * 28
                     )
         self.play_bttn = ft.IconButton(
                     icon=ft.icons.PLAY_CIRCLE,
@@ -36,7 +36,7 @@ class DownloadsItem:
                 )
 
     def play_audio(self):
-        self.app.layout.bottombar.bottombar_height_update()
+        self.app.layout.bottombar.bottombar_height_update(200)
         self.app.layout.bottombar.audio_player.set_audio_elements(
             self.filename,
             self.image_src,
@@ -60,6 +60,7 @@ class DownloadsItem:
                 self.name_text,
                 action_items
             ],
+            alignment=ft.MainAxisAlignment.CENTER
         )
         return view
 
